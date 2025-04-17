@@ -46,6 +46,7 @@ def load_model():
 pipe = llm.load_model()
 
 # --- Streamlit アプリケーション ---
+st.image("header_icon.png", width=500)
 st.title("🤖 Gemma 2 Chatbot with Feedback")
 st.write("Gemmaモデルを使用したチャットボットです。回答に対してフィードバックを行えます。")
 st.markdown("---")
@@ -55,6 +56,25 @@ st.sidebar.title("ナビゲーション")
 # セッション状態を使用して選択ページを保持
 if 'page' not in st.session_state:
     st.session_state.page = "チャット" # デフォルトページ
+
+
+## モデル候補
+#model_options = [
+#    "google/gemma-2b", 
+#    "gpt2",
+#]
+#
+## モデル選択（セッションに保持）
+#if "selected_model" not in st.session_state:
+#    st.session_state.selected_model = MODEL_NAME
+#
+#selected_model = st.sidebar.selectbox(
+#    "使用するモデルを選択",
+#    model_options,
+#    index=model_options.index(st.session_state.selected_model) if st.session_state.selected_model in model_options else 0,
+#    on_change=lambda: st.session_state.update(selected_model=st.session_state.selected_model_selector),
+#    key="selected_model_selector"
+#)
 
 page = st.sidebar.radio(
     "ページ選択",
