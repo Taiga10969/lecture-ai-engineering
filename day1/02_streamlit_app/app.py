@@ -59,6 +59,7 @@ if 'page' not in st.session_state:
 
 
 ## モデル候補
+#モデル選択をできようにしたいが今のところ難しい
 #model_options = [
 #    "google/gemma-2b", 
 #    "gpt2",
