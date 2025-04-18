@@ -81,7 +81,6 @@ selected_model = st.sidebar.selectbox(
 )
 
 
-
 page = st.sidebar.radio(
     "ページ選択",
     ["チャット", "履歴閲覧", "サンプルデータ管理", "レポート"],
