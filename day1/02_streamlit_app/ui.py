@@ -289,3 +289,34 @@ def display_data_page():
     for metric, description in metrics_info.items():
         with st.expander(f"{metric}"):
             st.write(description)
+
+# --- レポートページのUI ---
+def display_report_page():
+    """レポートページのUIを表示する"""
+    st.subheader("📄 レポート")
+
+    st.markdown("""
+    このページでは、Gemmaチャットボットの開発・評価に関するレポートを掲載しています。
+
+    ### 📌 概要
+    本チャットボットは Google の Gemma モデルをベースに構築されており、ユーザーからの質問に自然言語で応答します。
+
+    ### ⚙️ 実装概要
+    - モデル: `gemma-2b` / `gemma-2-2b-jpn-it`
+    - フレームワーク: Hugging Face Transformers, Streamlit
+    - 推論デバイス: GPU (CUDA対応)
+    - モデル評価: BLEU, 類似度, 応答時間 などの指標を使用
+
+    ### 📊 評価指標まとめ
+    - BLEUスコアは翻訳精度の目安として活用。
+    - 類似度・関連性スコアで内容の近さを測定。
+    - 応答時間もユーザー体験として重要な指標。
+
+    ### 🔁 今後の改善点
+    - より詳細なユーザーフィードバックの分析
+    - モデルの多様性とドメイン適応の強化
+    - レスポンスの説明性・信頼性の向上
+
+    ---
+    本プロジェクトは中部大学大学院・AI研究プロジェクトの一環として実施されています。
+    """)

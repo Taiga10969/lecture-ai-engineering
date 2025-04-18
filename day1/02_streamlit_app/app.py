@@ -25,28 +25,27 @@ data.ensure_initial_data()
 
 # LLMモデルのロード（キャッシュを利用）
 # モデルをキャッシュして再利用
-@st.cache_resource
-def load_model():
-    """LLMモデルをロードする"""
-    try:
-        device = "cuda" if torch.cuda.is_available() else "cpu"
-        st.info(f"Using device: {device}") # 使用デバイスを表示
-        pipe = pipeline(
-            "text-generation",
-            model=MODEL_NAME,
-            model_kwargs={"torch_dtype": torch.bfloat16},
-            device=device
-        )
-        st.success(f"モデル '{MODEL_NAME}' の読み込みに成功しました。")
-        return pipe
-    except Exception as e:
-        st.error(f"モデル '{MODEL_NAME}' の読み込みに失敗しました: {e}")
-        st.error("GPUメモリ不足の可能性があります。不要なプロセスを終了するか、より小さいモデルの使用を検討してください。")
-        return None
-pipe = llm.load_model()
+#@st.cache_resource
+#def load_model():
+#    """LLMモデルをロードする"""
+#    try:
+#        device = "cuda" if torch.cuda.is_available() else "cpu"
+#        st.info(f"Using device: {device}") # 使用デバイスを表示
+#        pipe = pipeline(
+#            "text-generation",
+#            model=MODEL_NAME,
+#            model_kwargs={"torch_dtype": torch.bfloat16},
+#            device=device
+#        )
+#        st.success(f"モデル '{MODEL_NAME}' の読み込みに成功しました。")
+#        return pipe
+#    except Exception as e:
+#        st.error(f"モデル '{MODEL_NAME}' の読み込みに失敗しました: {e}")
+#        st.error("GPUメモリ不足の可能性があります。不要なプロセスを終了するか、より小さいモデルの使用を検討してください。")
+#        return None
 
 # --- Streamlit アプリケーション ---
-st.image("header_icon01.png", width=500)
+st.image("ai-engineering_chatbot_icon.png", width=1000)
 st.title("🤖 Gemma 2 Chatbot with Feedback")
 st.write("Gemmaモデルを使用したチャットボットです。回答に対してフィードバックを行えます。")
 st.markdown("---")
@@ -59,32 +58,56 @@ if 'page' not in st.session_state:
 
 
 ## モデル候補
-#モデル選択をできようにしたいが今のところ難しい
-#model_options = [
-#    "google/gemma-2b", 
-#    "gpt2",
-#]
-#
-## モデル選択（セッションに保持）
-#if "selected_model" not in st.session_state:
-#    st.session_state.selected_model = MODEL_NAME
-#
-#selected_model = st.sidebar.selectbox(
-#    "使用するモデルを選択",
-#    model_options,
-#    index=model_options.index(st.session_state.selected_model) if st.session_state.selected_model in model_options else 0,
-#    on_change=lambda: st.session_state.update(selected_model=st.session_state.selected_model_selector),
-#    key="selected_model_selector"
-#)
+model_options = [
+    "モデルを選択してください",
+    "google/gemma-2b", 
+    "google/gemma-2-2b-jpn-it",
+]
+
+# モデル選択（セッションに保持）
+if "selected_model" not in st.session_state:
+    st.session_state.selected_model = MODEL_NAME
+
+selected_model = st.sidebar.selectbox(
+    "使用するモデルを選択",
+    model_options,
+    index=model_options.index(st.session_state.selected_model) if st.session_state.selected_model in model_options else 0,
+    on_change=lambda: st.session_state.update(selected_model=st.session_state.selected_model_selector),
+    key="selected_model_selector"
+)
+
+
 
 page = st.sidebar.radio(
     "ページ選択",
-    ["チャット", "履歴閲覧", "サンプルデータ管理"],
+    ["チャット", "履歴閲覧", "サンプルデータ管理", "レポート"],
     key="page_selector",
-    index=["チャット", "履歴閲覧", "サンプルデータ管理"].index(st.session_state.page), # 現在のページを選択状態にする
+    index=["チャット", "履歴閲覧", "サンプルデータ管理", "レポート"].index(st.session_state.page), # 現在のページを選択状態にする
     on_change=lambda: setattr(st.session_state, 'page', st.session_state.page_selector) # 選択変更時に状態を更新
 )
 
+## モデル読み込み
+# LLMモデルのロード（キャッシュを利用）
+# モデルをキャッシュして再利用
+@st.cache_resource
+def load_model(model_name):
+    """LLMモデルをロードする"""
+    try:
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+        st.info(f"Using device: {device}") # 使用デバイスを表示
+        pipe = pipeline(
+            "text-generation",
+            model=model_name,
+            model_kwargs={"torch_dtype": torch.bfloat16},
+            device=device
+        )
+        st.success(f"モデル '{model_name}' の読み込みに成功しました。")
+        return pipe
+    except Exception as e:
+        st.error(f"モデル '{model_name}' の読み込みに失敗しました: {e}")
+        st.error("GPUメモリ不足の可能性があります。不要なプロセスを終了するか、より小さいモデルの使用を検討してください。")
+        return None
+pipe = load_model(st.session_state.selected_model)
 
 # --- メインコンテンツ ---
 if st.session_state.page == "チャット":
@@ -96,6 +119,8 @@ elif st.session_state.page == "履歴閲覧":
     ui.display_history_page()
 elif st.session_state.page == "サンプルデータ管理":
     ui.display_data_page()
+elif st.session_state.page == "レポート":
+    ui.display_report_page()
 
 # --- フッターなど（任意） ---
 st.sidebar.markdown("---")
