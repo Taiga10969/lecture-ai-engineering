@@ -1,5 +1,6 @@
 # 演習で作成されるシークレットファイルとdbファイル
 **/secret.toml
+**/secrets.toml
 **/chat_feedback.db
 
 # Byte-compiled / optimized / DLL files
