@@ -64,9 +64,13 @@ model_options = [
     "google/gemma-2-2b-jpn-it",
 ]
 
-# モデル選択（セッションに保持）
+## モデル選択（セッションに保持）
+#if "selected_model" not in st.session_state:
+#    st.session_state.selected_model = MODEL_NAME
+
+# 初期選択を「モデルを選択してください」にする
 if "selected_model" not in st.session_state:
-    st.session_state.selected_model = MODEL_NAME
+    st.session_state.selected_model = "モデルを選択してください"
 
 selected_model = st.sidebar.selectbox(
     "使用するモデルを選択",
