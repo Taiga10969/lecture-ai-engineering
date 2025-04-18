@@ -38,11 +38,19 @@ def generate_response(pipe, user_question):
 
     try:
         start_time = time.time()
-        messages = [
-            {"role": "user", "content": user_question},
-        ]
+        #messages = [
+        #    {"role": "user", "content": user_question},
+        #]
+
+        if st.session_state.selected_model == "google/gemma-2b":
+            # シンプルなプロンプト入力を使用
+            inputs = user_question
+        elif st.session_state.selected_model == "google/gemma-2-2b-jpn-it":
+            # メッセージ形式で入力
+            inputs = [{"role": "user", "content": user_question}]
+
         # max_new_tokensを調整可能にする（例）
-        outputs = pipe(messages, max_new_tokens=512, do_sample=True, temperature=0.7, top_p=0.9)
+        outputs = pipe(inputs, max_new_tokens=512, do_sample=True, temperature=0.7, top_p=0.9)
 
         # Gemmaの出力形式に合わせて調整が必要な場合がある
         # 最後のassistantのメッセージを取得
