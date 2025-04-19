@@ -23,7 +23,7 @@
 - アプリに「レポート」ページを追加し、実装内容をStreamlit上に表示可能に。
   ※レポートの内容はこのREADMEの内容と同様．
 
----
+
 
 ## ⚙️ 実装方法
 
@@ -34,7 +34,7 @@
 st.image("ai-engineering_chatbot_icon.png", width=1000)
 ```
 
----
+
 
 ### 2. モデル選択の改良
 
@@ -100,7 +100,7 @@ def generate_response(pipe, user_question):
         ...
 ```
 
----
+
 
 ### 3. レポートページの追加
 
@@ -113,7 +113,7 @@ elif st.session_state.page == "レポート":
 
 #### `ui.py` 内に `display_report_page()` を定義し、本文表示を実装。
 
----
+
 
 ## 🤗 モデル出力結果の比較
 
@@ -149,7 +149,6 @@ elif st.session_state.page == "レポート":
 - `gemma-2-2b-jpn-it` モデルは日本語に特化しているため、構造化された正確な回答が得られる。
 - `gemma-2b` モデルは汎用性はあるが、日本語対応の精度に劣るため繰り返し文などが出力されやすい。
 
----
 
 ## 📎 補足
 
@@ -157,6 +156,12 @@ elif st.session_state.page == "レポート":
 - モデル追加や拡張も今後簡単に行える設計になっています。
 
 ---
+
+## 実行結果
+実行したときのスクリーンショットを添付します。
+![](https://raw.githubusercontent.com/Taiga10969/lecture-ai-engineering/refs/heads/master/day1/02_streamlit_app/results_image/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88%202025-04-19%200.58.02.png)
+![](https://raw.githubusercontent.com/Taiga10969/lecture-ai-engineering/refs/heads/master/day1/02_streamlit_app/results_image/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88%202025-04-19%201.23.17.png)
+![](https://raw.githubusercontent.com/Taiga10969/lecture-ai-engineering/refs/heads/master/day1/02_streamlit_app/results_image/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88%202025-04-19%201.23.58.png)
 
 Omnicampus アカウント名：`taiga10969`  
 名前：増田大河
