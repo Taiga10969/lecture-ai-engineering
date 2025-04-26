@@ -16,8 +16,8 @@ from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
 # --- 設定 ---
 # モデル名を設定
 # MODEL_NAME = "google/gemma-2-2b-jpn-it"  # お好みのモデルに変更可能です
-MODEL_NAME = "elyza/ELYZA-japanese-CodeLlama-7b-instruct" # デカすぎて無理
-# MODEL_NAME = "AXCXEPT/EZO-gemma-2-2b-jpn-it"
+MODEL_NAME = "elyza/ELYZA-japanese-CodeLlama-7b-instruct" # デカすぎて無理→量子化
+# MODEL_NAME = "AXCXEPT/EZO-gemma-2-2b-jpn-it" #他のモデルを試した
 print(f"モデル名を設定: {MODEL_NAME}")
 
 # --- モデル設定クラス ---
@@ -85,7 +85,7 @@ def load_model():
         traceback.print_exc()  # 詳細なエラー情報を出力
         return None
 
-
+# 量子化ロード関数
 def load_model_bits():
     global model
     try:
@@ -249,6 +249,8 @@ def load_model_task():
     print("load_model_task: モデルの読み込みを開始...")
     # load_model関数を呼び出し、結果をグローバル変数に設定
     # loaded_pipe = load_model()
+    
+    # load_model_bits関数を呼び出し、量子化モデルの結果をグローバル変数に設定
     loaded_pipe = load_model_bits()
     if loaded_pipe:
         model = loaded_pipe  # グローバル変数を更新
