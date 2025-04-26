@@ -14,3 +14,5 @@
 ## 📌 実施内容（概要）
 
 ### 1. モデルの変更
+AWSで作成するChatbotアプリケーションのモデルをコードに特化したChatbotの作成を目標として，コードに特化したモデルの選択をしました．<br>
+使用モデル：`MODEL_NAME = "elyza/ELYZA-japanese-CodeLlama-7b-instruct"`
