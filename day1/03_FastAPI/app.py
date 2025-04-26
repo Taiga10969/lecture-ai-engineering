@@ -11,11 +11,13 @@ import uvicorn
 import nest_asyncio
 from pyngrok import ngrok
 
+from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
+
 # --- 設定 ---
 # モデル名を設定
 # MODEL_NAME = "google/gemma-2-2b-jpn-it"  # お好みのモデルに変更可能です
-# MODEL_NAME = "elyza/ELYZA-japanese-CodeLlama-7b-instruct" # デカすぎて無理
-MODEL_NAME = "AXCXEPT/EZO-gemma-2-2b-jpn-it"
+MODEL_NAME = "elyza/ELYZA-japanese-CodeLlama-7b-instruct" # デカすぎて無理
+# MODEL_NAME = "AXCXEPT/EZO-gemma-2-2b-jpn-it"
 print(f"モデル名を設定: {MODEL_NAME}")
 
 # --- モデル設定クラス ---
@@ -82,6 +84,45 @@ def load_model():
         print(error_msg)
         traceback.print_exc()  # 詳細なエラー情報を出力
         return None
+
+
+def load_model_bits():
+    global model
+    try:
+        print(f"量子化してモデルを読み込みます: {config.MODEL_NAME}")
+
+        # トークナイザー
+        tokenizer = AutoTokenizer.from_pretrained(config.MODEL_NAME)
+
+        # 4bit量子化の設定
+        bnb_config = BitsAndBytesConfig(
+            load_in_4bit=True,
+            bnb_4bit_use_double_quant=True,
+            bnb_4bit_quant_type="nf4",
+            bnb_4bit_compute_dtype=torch.float16
+        )
+
+        model_base = AutoModelForCausalLM.from_pretrained(
+            config.MODEL_NAME,
+            quantization_config=bnb_config,
+            device_map="auto"
+        )
+
+        pipe = pipeline(
+            "text-generation",
+            model=model_base,
+            tokenizer=tokenizer
+        )
+
+        print("量子化モデルの読み込みに成功しました。")
+        model = pipe
+        return pipe
+
+    except Exception as e:
+        print(f"モデルの量子化読み込みに失敗しました: {e}")
+        traceback.print_exc()
+        return None
+
 
 def extract_assistant_response(outputs, user_prompt):
     """モデルの出力からアシスタントの応答を抽出する"""
@@ -207,7 +248,8 @@ def load_model_task():
     global model
     print("load_model_task: モデルの読み込みを開始...")
     # load_model関数を呼び出し、結果をグローバル変数に設定
-    loaded_pipe = load_model()
+    # loaded_pipe = load_model()
+    loaded_pipe = load_model_bits()
     if loaded_pipe:
         model = loaded_pipe  # グローバル変数を更新
         print("load_model_task: モデルの読み込みが完了しました。")
