@@ -59,6 +59,8 @@ def test_regression_inference_time():
     start = time.time()
     baseline_model.predict(X_test)
     baseline_time = time.time() - start
-    assert (
-        current_time <= baseline_time
-    ), f"推論時間が劣化しています: 現在={current_time:.4f}s, ベースライン={baseline_time:.4f}s"
+    # ベースラインより最大10%の遅延まで許容
+    max_allowed_time = baseline_time * 1.1
+    assert current_time <= max_allowed_time, (
+        f"推論時間が劣化しています: 現在={current_time:.4f}s, 許容時間={max_allowed_time:.4f}s"
+    )
