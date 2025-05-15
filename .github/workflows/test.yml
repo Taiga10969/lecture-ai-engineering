@@ -39,3 +39,18 @@ jobs:
     - name: Run model tests
       run: |
         pytest day5/演習3/tests/test_model.py -v
+
+    # 追加: モデルの推論精度と推論時間を検証
+    - name: Evaluate model performance
+      run: |
+        pytest day5/演習3/tests/test_model.py::test_model_accuracy -v
+        pytest day5/演習3/tests/test_model.py::test_model_inference_time -v
+    # 追加: ベースラインモデルをシード（初回用／テストのためのダミーコピー）
+    - name: Seed baseline model
+      run: |
+        cp day5/演習3/models/titanic_model.pkl \
+           day5/演習3/models/titanic_model_baseline.pkl
+    # 追加: 過去バージョンのモデルと比較して性能劣化がないか検証
+    - name: Performance regression test
+      run: |
+        pytest day5/演習3/tests/test_regression.py -v
